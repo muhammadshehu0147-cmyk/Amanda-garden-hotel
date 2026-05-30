@@ -1,0 +1,487 @@
+ amanda-garden-hotel/
+│
+├── app/
+│   ├── page.tsx
+│   ├── layout.tsx
+│   ├── globals.css
+│   ├── rooms/
+│   ├── apartments/
+│   ├── gallery/
+│   ├── contact/
+│   └── api/
+│
+├── components/
+│   ├── Navbar.tsx
+│   ├── Hero.tsx
+│   ├── BookingForm.tsx
+│   ├── Rooms.tsx
+│   ├── Gallery.tsx
+│   ├── Testimonials.tsx
+│   ├── Restaurant.tsx
+│   ├── Services.tsx
+│   ├── Footer.tsx
+│   ├── HiddenAdminTrigger.tsx
+│   └── AdminDashboard.tsx
+│
+├── lib/
+│   ├── supabase.ts
+│   └── data.ts
+│
+├── public/
+│   ├── logo.png
+│   ├── hero.jpg
+│   ├── rooms/
+│   ├── pool/
+│   ├── restaurant/
+│   └── gallery/
+│
+├── styles/
+├── package.json
+├── tailwind.config.ts
+└── next.config.js
+npm install framer-motion lucide-react @supabase/supabase-js
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        cream: '#F8F5F0',
+        beige: '#E7D8C9',
+        softgold: '#C9A96E'
+      }
+    },
+  },
+  plugins: [],
+};
+
+export default config;
+import Navbar from '@/components/Navbar'
+import Hero from '@/components/Hero'
+import Rooms from '@/components/Rooms'
+import Gallery from '@/components/Gallery'
+import Services from '@/components/Services'
+import Restaurant from '@/components/Restaurant'
+import Testimonials from '@/components/Testimonials'
+import Footer from '@/components/Footer'
+import HiddenAdminTrigger from '@/components/HiddenAdminTrigger'
+
+export default function Home() {
+  return (
+    <main className="bg-white text-gray-900 overflow-hidden">
+      <HiddenAdminTrigger />
+      <Navbar />
+      <Hero />
+      <Rooms />
+      <Gallery />
+      <Restaurant />
+      <Services />
+      <Testimonials />
+      <Footer />
+    </main>
+  )
+}
+
+        'use client'
+
+import Image from 'next/image'
+
+export default function Navbar() {
+  return (
+    <header className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/50 border-b border-white/20">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+        <div id="hotel-logo" className="cursor-pointer flex items-center gap-3">
+          <Image
+            src="/logo.png"
+            alt="Amanda Garden Hotel"
+            width={50}
+            height={50}
+            className="rounded-full"
+          />
+          <h1 className="font-semibold text-xl">Amanda Garden Hotel</h1>
+        </div>
+
+        <nav className="hidden md:flex gap-8 text-sm font-medium">
+          <a href="#home">Home</a>
+          <a href="#rooms">Rooms</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#restaurant">Restaurant</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <button className="bg-black text-white px-5 py-3 rounded-full">
+          Book Now
+        </button>
+      </div>
+    </header>
+  )
+}'use client'
+
+import { motion } from 'framer-motion'
+
+export default function Hero() {
+  return (
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: "url('/hero.jpg')" }}
+    >
+
+      <div className="absolute inset-0 bg-black/30" />
+
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="relative z-10 text-center px-6"
+      >
+        <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
+          Experience Comfort & Luxury in Akwanga
+        </h1>
+
+        <p className="mt-6 text-lg text-white/90 max-w-2xl mx-auto">
+          Premium accommodation, elegant hospitality, and modern comfort.
+        </p>
+
+        <div className="mt-8 flex gap-4 justify-center flex-wrap">
+          <button className="bg-white text-black px-8 py-4 rounded-full">
+            Book Now
+          </button>
+
+          <button className="bg-white/20 border border-white text-white px-8 py-4 rounded-full backdrop-blur-xl">
+            Explore Rooms
+          </button>
+        </div>
+      </motion.div>
+    </section>
+  )
+}const rooms = [
+  {
+    title: 'Standard Room',
+    price: '₦10,000',
+    image: '/rooms/room1.jpg'
+  },
+  {
+    title: 'Executive Suite',
+    price: '₦12,000',
+    image: '/rooms/room2.jpg'
+  },
+  {
+    title: 'VIP Apartment',
+    price: '₦15,000',
+    image: '/rooms/room3.jpg'
+  }
+]
+
+export default function Rooms() {
+  return (
+    <section id="rooms" className="py-28 px-6 bg-cream">
+      <div className="max-w-7xl mx-auto">
+
+        <div className="text-center mb-16">
+          <h2 className="text-5xl font-bold">
+            Luxury Rooms & Apartments
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {rooms.map((room, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-3xl overflow-hidden shadow-xl hover:-translate-y-2 transition"
+            >
+              <img
+                src={room.image}
+                className="h-72 w-full object-cover"
+              />
+
+              <div className="p-8">
+                <h3 className="text-2xl font-semibold">
+                  {room.title}
+                </h3>
+
+                <p className="mt-3 text-gray-600">
+                  Smart TV • Free WiFi • Air Conditioning
+                </p>
+
+                <div className="mt-6 flex items-center justify-between">
+                  <span className="text-2xl font-bold">
+                    {room.price}
+                  </span>
+
+                  <button className="bg-black text-white px-6 py-3 rounded-full">
+                    Book
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+        
+
+        'use client'
+
+import { useEffect, useState } from 'react'
+import AdminDashboard from './AdminDashboard'
+
+export default function HiddenAdminTrigger() {
+  const [clicks, setClicks] = useState(0)
+  const [open, setOpen] = useState(false)
+  const [password, setPassword] = useState('')
+  const [authenticated, setAuthenticated] = useState(false)
+
+  useEffect(() => {
+    const logo = document.getElementById('hotel-logo')
+
+    const handleClick = () => {
+      setClicks(prev => prev + 1)
+    }
+
+    logo?.addEventListener('click', handleClick)
+
+    return () => {
+      logo?.removeEventListener('click', handleClick)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (clicks >= 3) {
+      setOpen(true)
+      setClicks(0)
+    }
+  }, [clicks])
+
+  const handleLogin = () => {
+    if (password === 'amanda11') {
+      setAuthenticated(true)
+    } else {
+      alert('Wrong password')
+    }
+  }
+
+  return (
+    <>
+      {open && !authenticated && (
+        <div className="fixed inset-0 bg-black/50 z-[999] flex items-center justify-center">
+
+          <div className="bg-white rounded-3xl p-10 w-[90%] max-w-md">
+            <h2 className="text-3xl font-bold mb-6">
+              Admin Access
+            </h2>
+
+            <input
+              type="password"
+              placeholder="Enter Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full border p-4 rounded-xl"
+            />
+
+            <button
+              onClick={handleLogin}
+              className="w-full bg-black text-white py-4 rounded-xl mt-6"
+            >
+              Login
+            </button>
+          </div>
+        </div>
+      )}
+
+      {authenticated && <AdminDashboard />}
+    </>
+  )
+}
+        'use client'
+
+import { useState } from 'react'
+
+export default function AdminDashboard() {
+
+  const [saving, setSaving] = useState(false)
+
+  const handleSave = async () => {
+    setSaving(true)
+
+    setTimeout(() => {
+      setSaving(false)
+      alert('Saved Successfully')
+    }, 2000)
+  }
+
+  return (
+    <div className="fixed inset-0 z-[9999] bg-[#f8f8f8] overflow-y-auto">
+
+      <div className="flex">
+
+        <aside className="w-72 min-h-screen bg-white shadow-xl p-8">
+          <h2 className="text-3xl font-bold mb-10">
+            Hotel CMS
+          </h2>
+
+          <div className="space-y-5 text-gray-700">
+            <button>Dashboard</button>
+            <button>Uploads</button>
+            <button>Rooms</button>
+            <button>Bookings</button>
+            <button>Gallery</button>
+            <button>Testimonials</button>
+            <button>Promotions</button>
+            <button>Settings</button>
+          </div>
+        </aside>
+
+        <main className="flex-1 p-10">
+
+          <div className="grid md:grid-cols-4 gap-6 mb-12">
+
+            <div className="bg-white rounded-3xl p-6 shadow-lg">
+              <h3>Total Rooms</h3>
+              <p className="text-4xl font-bold mt-3">42</p>
+            </div>
+
+            <div className="bg-white rounded-3xl p-6 shadow-lg">
+              <h3>Bookings</h3>
+              <p className="text-4xl font-bold mt-3">18</p>
+            </div>
+
+            <div className="bg-white rounded-3xl p-6 shadow-lg">
+              <h3>Guests</h3>
+              <p className="text-4xl font-bold mt-3">105</p>
+            </div>
+
+            <div className="bg-white rounded-3xl p-6 shadow-lg">
+              <h3>Revenue</h3>
+              <p className="text-4xl font-bold mt-3">₦4.2M</p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-3xl p-8 shadow-lg mb-10">
+
+            <h2 className="text-3xl font-bold mb-8">
+              Room Management
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-6">
+
+              <input
+                placeholder="Room Name"
+                className="border p-4 rounded-xl"
+              />
+
+              <input
+                placeholder="Room Price"
+                className="border p-4 rounded-xl"
+              />
+
+              <textarea
+                placeholder="Room Description"
+                className="border p-4 rounded-xl col-span-2 h-40"
+              />
+            </div>
+
+            <button
+              onClick={handleSave}
+              className="mt-8 bg-black text-white px-8 py-4 rounded-xl"
+            >
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+
+          <div className="bg-white rounded-3xl p-8 shadow-lg">
+
+            <h2 className="text-3xl font-bold mb-8">
+              Image Upload Center
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-6">
+
+              <div className="border-2 border-dashed p-10 rounded-3xl">
+                <h3 className="font-semibold mb-5">
+                  Upload Room Images
+                </h3>
+
+                <input type="file" />
+
+                <button
+                  onClick={handleSave}
+                  className="mt-6 bg-black text-white px-6 py-3 rounded-xl"
+                >
+                  SAVE
+                </button>
+              </div>
+
+              <div className="border-2 border-dashed p-10 rounded-3xl">
+                <h3 className="font-semibold mb-5">
+                  Upload Pool Images
+                </h3>
+
+                <input type="file" />
+
+                <button
+                  onClick={handleSave}
+                  className="mt-6 bg-black text-white px-6 py-3 rounded-xl"
+                >
+                  SAVE
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  )
+                import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+export const supabase = createClient(
+  supabaseUrl,
+  supabaseAnonKey
+)
+}
+
+                NEXT_PUBLIC_SUPABASE_URL=YOUR_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_KEY
+                
+
+                create table rooms (
+  id bigint generated always as identity primary key,
+  title text,
+  description text,
+  price text,
+  image text,
+  available boolean default true
+);
+
+create table bookings (
+  id bigint generated always as identity primary key,
+  customer_name text,
+  room_name text,
+  check_in text,
+  check_out text,
+  status text
+);
+
+create table gallery (
+  id bigint generated always as identity primary key,
+  category text,
+  image text
+);
+                git init
+git add .
+git commit -m "Amanda Garden Hotel"
+git branch -M main
+git remote add origin YOUR_GITHUB_REPO
+git push -u origin main
+        
